@@ -8,18 +8,19 @@
   <title>Document</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.2.1/echarts-en.common.min.js"></script>
   <script src="./js/shine.js"></script>
+  <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
   <style>
     /* body {
       padding: 0;
       margin: 0
     } */
-    .b-left{
+    .b-left {
       position: fixed;
       left: 5;
       bottom: 10px;
     }
 
-    .b-right{
+    .b-right {
       position: fixed;
       right: 8px;
       bottom: 10px;
@@ -66,10 +67,10 @@
       margin-right: 10px
     }
 
-    .title-left{
+    .title-left {
       color: rgb(92, 113, 171)
     }
-    
+
     .item-title {
       /* background-color: #ef342a; */
       /* grid-area: 1 / 1 / 3 / 3; */
@@ -108,16 +109,17 @@
       background-size: 100% 100%;
     }
 
-    .item-data-header> section{
+    .item-data-header>section {
       width: 90%
     }
 
-    .num{
+    .num {
       /* font-weight: bold; */
       color: rgb(0, 222, 255);
       font-size: 40px;
     }
-    .price{
+
+    .price {
       color: rgb(230, 48, 123);
       font-size: 40px;
     }
@@ -207,6 +209,25 @@
     .mar-b-20 {
       margin-bottom: 10px
     }
+
+    /* ============= */
+    .ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    .tabtit li {
+      padding: 5px 20px;
+      background: rgb(49, 94, 127);
+      list-style: none;
+      border-radius: 50px;
+      margin: 10px 0;
+    }
+
+    .tabcont {
+      display: none;
+      margin-left: 30px;
+    }
   </style>
 </head>
 
@@ -221,22 +242,27 @@
     <div class="item item-title row al-start">
       <div class="title-left column" style="width: 40%">
         <img style="align-self: flex-end" src="./images/header-left.png" height="50" alt="">
-        <div class="mar-b-20 mar-l-10 row">
+        <div class="mar-b-20 mar-l-10 mar-t-30 row">
           <img src="./images/right@3x.png" height="20" alt="">
-          <img src="./images/tianqi@3x.png" height="20" alt="">
-          <span>温度 </span>
-          <span class="weather-txt">27~30℃</span>
-          <span>&nbsp空气质量</span>
-          <span class="weather-txt">良</span>
+          <!-- <img src="./images/tianqi@3x.png" height="20" alt=""> -->
+          <span>天气</span>
+          <span class="weather-txt" id="weather"></span>
+          <span>&nbsp温度 </span>
+          <span class="weather-txt" id="temp"></span>
+          <span>&nbsp空气湿度</span>
+          <span class="weather-txt" id="air">良</span>
           <span>&nbsp风向</span>
-          <span class="weather-txt">微风</span>
+          <span class="weather-txt" id="wind">微风</span>
         </div>
         <img class="mar-l-10" src="./images/leftop@3x.png" alt="">
       </div>
       <span class="sys-name">旅游大数据分析系统</span>
       <div class="title-right column" style="width: 40%; align-items: flex-end">
         <img style="align-self: flex-start" src="./images/header-right.png" height="50" alt="">
-        <div class="mar-t-30 mar-r-10">2019-07-26 10:00:00 星期五</div>
+        <div class="mar-t-30 mar-r-10 row">
+          <div id="time"></div>
+          <div id="week" class="mar-l-10"></div>
+        </div>
         <img class="mar-r-10" src="./images/rightop@3x.png" alt="">
       </div>
     </div>
@@ -294,7 +320,22 @@
     </div>
     <div class="item item-data-main">
       <div class="row mar-l-20 mar-t-10">
-        <span class="title"><img src="./images/right@3x.png" alt="">中间数据图表</span>
+        <div class="tabcontent row" style="align-items: flex-start">
+          <div class="tabtit">
+            <ul class="ul">
+              <li class="t3">视频</li>
+              <li class="t2">实景图</li>
+              <li class="t1">景区热点</li>
+            </ul>   
+          </div>
+          <div class="tabcont">
+            <video height="400" width="700" id="vdo" controls="controls" src="http://zuimeilangqi.com/mediaLibrary/fileLibrary/20181129/20181129022619_43348.mp4"></video>
+          </div>
+          <div class="tabcont">
+              <iframe height="400" width="700" src="http://zuimeilangqi.com/mediaLibrary/vtour/tour.html"></iframe>
+          </div>
+          <div class="tabcont">3.美食品尝 2.户外写生</div>
+        </div>
       </div>
     </div>
     <div class="item item-rate">
@@ -773,6 +814,39 @@
 
 
   // =============新增js
+  let time = new Date().toLocaleString('chinese', { hour12: false }); // 修改数据date
+  document.getElementById('time').innerHTML = time
+  setInterval(() => {
+    let time = new Date().toLocaleString('chinese', { hour12: false }); // 修改数据date
+    document.getElementById('time').innerHTML = time
+  }, 1000)
+
+  var a = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+  var week = new Date().getDay();
+  document.getElementById('week').innerHTML = a[week];
+
+  var city = 350100, key = "13b8f05dce690a443d2d85ca191c45f9"
+  $.ajax({
+    type: "get",
+    url: `https://restapi.amap.com/v3/weather/weatherInfo?key=${key}&city=${city}`,
+    dataType: "json",
+    success: function (response) {
+      let data = response.lives[0]
+      $('#weather').text(data.weather)
+      $('#temp').text(data.temperature)
+      $('#air').text(data.humidity)
+      $('#wind').text(data.winddirection)
+    }
+  });
+  $('.tabcont').eq(0).show();  //默认显示第一个内容
+  $('.tabcontent li').eq(0).css('background', '#1E90FF');  //默认第一个标题显示颜色不同
+  $('.tabcontent li').mouseover(function () {   //鼠标移上去
+    $(this).css('background', '#1E90FF').siblings().css('background', '#315E7F');  //标题的颜色变成选中色,其他颜色还原
+    $('.tabcont').hide().eq($(this).index()).show();   //当前选中内容显示
+    if($(this).index() !== 0) {
+      document.getElementById("vdo").pause()
+    }
+  });
 </script>
 
 </html>
