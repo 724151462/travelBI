@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.2.1/echarts-en.common.min.js"></script>
+  <script src="http://data-visual.cn/datav/src/js/echarts/extension/echarts-wordcloud.min.js"></script>
+  <script src="./js/shine.js"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <style>
+    /* body {
+      padding: 0;
+      margin: 0
+    } */
+    .b-left {
+      position: fixed;
+      left: 5;
+      bottom: 10px;
+    }
+
+    .b-right {
+      position: fixed;
+      right: 8px;
+      bottom: 10px;
+    }
+
+    #container {
+      display: grid;
+      justify-content: center;
+      align-content: center;
+      grid-template-columns: 24% 50% 24%;
+      grid-template-rows: 150px 150px 150px 300px 300px;
+      gap: 5px;
+      background-color: rgba(15, 33, 79, 0.8);
+      background-image: url('./images/background@3x.png');
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      /* grid-auto-flow: column; */
+      /* grid-auto-rows: 100px; */
+    }
+
+    .item {
+      font-size: 2vh;
+      text-align: center;
+      /* border: 1px solid #e5e4e9; */
+      color: #fff;
+      height: inherit;
+      /* background-color: rgba(24, 28, 65, 0.8); */
+      background-image: url('./images/box@3x.png');
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+    }
+
+    .title {
+      background: linear-gradient(to right, rgba(24, 28, 65, 1), rgba(0, 72, 249, 1), rgba(24, 28, 65, 1));
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .title>span {
+      color: rgb(0, 174, 255)
+    }
+
+    .title>img {
+      height: 20px;
+      margin-right: 10px
+    }
+
+    .title-left {
+      color: rgb(92, 113, 171)
+    }
+
+    .item-title {
+      /* background-color: #ef342a; */
+      /* grid-area: 1 / 1 / 3 / 3; */
+      grid-column: 1 / span 3;
+      background-image: none;
+      background-color: rgba(34, 40, 74, 0.6)
+        /* grid-row: 2 / 3; */
+    }
+
+    .sys-name {
+      width: 45%;
+      color: rgb(0, 222, 255);
+      font-size: 1.5em;
+      font-weight: bold;
+      display: inline-block;
+      padding-bottom: 5px;
+      background-image: url('./images/header-bg.png');
+    }
+
+    .weather-txt {
+      color: rgb(0, 214, 250)
+    }
+
+    .item-people {
+      /* background-color: #f68f26; */
+      grid-row: 2 / 4;
+    }
+
+    .item-data-header {
+      /* background-color: #4ba946; */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(6, 51, 117, 0.8);
+      background-image: url('./images/top@3x.png');
+      background-size: 100% 100%;
+    }
+
+    .item-data-header>section {
+      width: 90%
+    }
+
+    .num {
+      /* font-weight: bold; */
+      color: rgb(0, 222, 255);
+      font-size: 40px;
+    }
+
+    .price {
+      color: rgb(230, 48, 123);
+      font-size: 40px;
+    }
+
+    .item-age {
+      /* background-color: #0376c2; */
+      grid-row: 2 / 4;
+      grid-column: 3 / span 1;
+    }
+
+    .item-day {
+      /* background-color: #c077af; */
+      grid-row: 4 / span 1
+    }
+
+    .item-data-main {
+      /* background-color: #f8d29d; */
+      grid-row: 3 /span 2;
+    }
+
+    .item-rate {
+      /* background-color: #b5a87f; */
+    }
+
+    .item-search {
+      /* background-color: #d0e4a9; */
+    }
+
+    .item-tourist {
+      /* background-color: #4dc7ec; */
+    }
+
+    .item-gender {
+      /* background-color: #4dc7ec; */
+    }
+
+    #map-container{
+      width: 700px;
+      height: 400px;
+    }
+
+    .data-content {
+      width: 100%;
+      height: 250px;
+    }
+
+    .item-tourist {
+      width: 950px;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .mar-l-20 {
+      margin-left: 20px;
+    }
+
+    .mar-t-10 {
+      margin-top: 10px;
+    }
+
+    .mar-t-30 {
+      margin-top: 30px;
+    }
+
+    .mar-l-10 {
+      margin-left: 10px;
+    }
+
+    .mar-r-10 {
+      margin-right: 10px;
+    }
+
+    .al-center {
+      align-items: center;
+    }
+
+    .al-start {
+      align-items: flex-start
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+
+    .mar-b-20 {
+      margin-bottom: 10px
+    }
+
+    .ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    .tabtit li {
+      padding: 5px 20px;
+      background: rgb(49, 94, 127);
+      list-style: none;
+      border-radius: 50px;
+      margin: 10px 0;
+    }
+
+    .tabcont {
+      display: none;
+      margin-left: 30px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="b-left">
+    <img src="./images/leftdown@3x.png" width="15" alt="">
+  </div>
+  <div class="b-right">
+    <img src="./images/rightdown@3x.png" width="15" alt="">
+  </div>
+  <div id="container">
+    <div class="item item-title row al-start">
+      <div class="title-left column" style="width: 40%">
+        <img style="align-self: flex-end" src="./images/header-left.png" height="50" alt="">
+        <div class="mar-b-20 mar-l-10 mar-t-30 row">
+          <img src="./images/right@3x.png" height="20" alt="">
+          <!-- <img src="./images/tianqi@3x.png" height="20" alt=""> -->
+          <span>天气</span>
+          <span class="weather-txt" id="weather"></span>
+          <span>&nbsp温度 </span>
+          <span class="weather-txt" id="temp"></span>
+          <span>&nbsp空气湿度</span>
+          <span class="weather-txt" id="air">良</span>
+          <span>&nbsp风向</span>
+          <span class="weather-txt" id="wind">微风</span>
+        </div>
+        <img class="mar-l-10" src="./images/leftop@3x.png" alt="">
+      </div>
+      <span class="sys-name">旅游大数据分析系统</span>
+      <div class="title-right column" style="width: 40%; align-items: flex-end">
+        <img style="align-self: flex-start" src="./images/header-right.png" height="50" alt="">
+        <div class="mar-t-30 mar-r-10 row">
+          <div id="time"></div>
+          <div id="week" class="mar-l-10"></div>
+        </div>
+        <img class="mar-r-10" src="./images/rightop@3x.png" alt="">
+      </div>
+    </div>
+    <div class="item item-people">
+      <div class="row mar-l-20 mar-t-10">
+        <span class="title"><img src="./images/right@3x.png" alt="">实时景点游览人数占比</span>
+      </div>
+      <div class="charts">
+        <div class="data-content" id="tourist-num"></div>
+      </div>
+    </div>
+    <div class="item item-data-header">
+      <section class="row">
+        <div class="column">
+            <span class="num">${statistics.travel_num}</span>
+            <span class="num-desc">今日游客人数</span>
+        </div>
+        <div class="column">
+            <span class="num">${statistics.ticket_count}</span>
+            <span class="num-desc">今日售票数</span>
+        </div>
+        <div class="column">
+            <span class="num">${statistics.check_in_count}</span>
+            <span class="num-desc">民宿入住数</span>
+        </div>
+        <div class="column">
+            <span class="num">${statistics.commodity_sale_num}</span>
+            <span class="num-desc">商品销售数</span>
+        </div>
+        <div class="column">
+            <span class="price">${statistics.commodity_sale_num}</span>
+            <span class="num-desc">商品销售数</span>
+        </div>
+        <div class="column">
+            <span class="price">${statistics.business_volume}</span>
+            <span class="num-desc">今日营业额</span>
+        </div>
+    </section>
+    </div>
+    <div class="item item-age">
+      <div class="row mar-l-20 mar-t-10">
+        <span class="title"><img src="./images/right@3x.png" alt="">游客年龄特性分析</span>
+      </div>
+      <div class="charts">
+        <div class="data-content" id="tourist-age"></div>
+      </div>
+    </div>
+    <div class="item item-day">
+      <div class="row mar-l-20 mar-t-10">
+        <span class="title"><img src="./images/right@3x.png" alt="">游客景点行程天数分析</span>
+      </div>
+      <div class="charts" style="width: 500px;margin-left: 0px">
+        <div class="data-content" id="tourist-date"></div>
+      </div>
+    </div>
+    <div class="item item-data-main">
+      <div class="row mar-l-20 mar-t-10">
+        <div class="tabcontent row" style="align-items: flex-start">
+          <div class="tabtit">
+            <ul class="ul">
+              <li class="t3">视频</li>
+              <li class="t2">实景图</li>
+              <li class="t1">景区热点</li>
+            </ul>   
+          </div>
+          <div class="tabcont">
+            <video height="400" width="700" id="vdo" controls="controls" src="./video/琅岐岛.mp4"></video>
+          </div>
+          <div class="tabcont">
+              <iframe height="400" width="700" src="http://zuimeilangqi.com/mediaLibrary/vtour/tour.html"></iframe>
+          </div>
+          <div class="tabcont" id="map-container">
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="item item-rate">
+      <div class="row mar-l-20 mar-t-10">
+        <span class="title"><img src="./images/right@3x.png" alt="">游客频率分析</span>
+      </div>
+      <div class="charts">
+        <div class="data-content" id="tourist-rate"></div>
+      </div>
+    </div>
+    <div class="item item-search">
+      <div class="row mar-l-20 mar-t-10">
+        <span class="title"><img src="./images/right@3x.png" alt="">搜索热词</span></span>
+      </div>
+      <div class="charts">
+        <div id='wc' style="width: 100%; height: 250px"></div>
+      </div>
+    </div>
+    <div class="item">
+      <div class="row  item-tourist">
+        <div class="column" style="width: 50%">
+          <div class="row mar-l-20 mar-t-10">
+            <span class="title"><img src="./images/right@3x.png" alt="">游客娱乐项目占比</span>
+          </div>
+          <div class="charts">
+            <div class="data-content" style="width: 450px" id="tourist-entertain"></div>
+          </div>
+        </div>
+
+        <div class="column" style="width: 50%">
+          <div class="row mar-l-20 mar-t-10">
+            <span class="title"><img src="./images/right@3x.png" alt="">今日旅游监控数据</span>
+          </div>
+          <div class="charts">
+            <div class="data-content" style="width: 450px" id="tourist-jkdata"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="item item-gender">
+      <div class="row mar-l-20 mar-t-10">
+        <span class="title"><img src="./images/right@3x.png" alt="">游客性别分析</span>
+      </div>
+      <div class="charts">
+        <div class="data-content" id="tourist-gender"></div>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="./js/drawCharts.js"></script>
+<script src="./js/timWeaTab.js"></script>
+<script src="https://webapi.amap.com/maps?v=1.4.15&key=c84da73fddca92c5416e2999c7baf667&&plugin=AMap.ToolBar"></script>
+<script src="./js/map.js"></script>
+<script src="./js/wc.js"></script>
+<script>
+  var url = 'http://localhost:3000/api'
+  $(function () {
+    getWeather()
+    getPeopleRate()
+    // getGeneraldata()
+    getTouristage()
+    getTouristdate()
+    getTouristfrequency()
+    getTouristentertain()
+    getTodaydata()
+    getTouristgender()
+  })
+
+  function getWeather() {
+    $.ajax({
+      type: "get",
+      url: `${url}/weather`,
+      dataType: "json",
+      success: function (response) {
+        var data = response.data
+        $('#temp').text(data.temp + '℃')
+        $('#air').text(data.air)
+        $('#wind').text(data.wind)
+      }
+    });
+  }
+
+  // 实时人数占比
+  function getPeopleRate(params) {
+    $.ajax({
+      type: "get",
+      url: `${url}/touristrate`,
+      dataType: "json",
+      success: function (response) {
+        var legend = []
+        var data = []
+        response.data.forEach(element => {
+          legend.push(element.place)
+          data.push({ value: element.num, name: element.place })
+        });
+        // 指定图表的配置项和数据
+        var option = {
+          tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b}: {c} ({d}%)"
+          },
+          legend: {
+            orient: 'vertical',
+            x: 'right',
+            data: legend,
+            textStyle: {
+              fontSize: 16,//字体大小
+              color: '#ffffff'//字体颜色
+            }
+          },
+          series: [
+            {
+              name: '游览比例',
+              type: 'pie',
+              radius: ['50%', '70%'],
+              avoidLabelOverlap: false,
+              label: {
+                normal: {
+                  show: false,
+                  position: 'center'
+                },
+                emphasis: {
+                  show: true,
+                  textStyle: {
+                    fontSize: '20'
+                  }
+                }
+              },
+              labelLine: {
+                normal: {
+                  show: false
+                }
+              },
+              data
+            }
+          ]
+        };
+        drawCharts('tourist-num', option)
+      }
+    });
+
+  }
+
+  function getGeneraldata() {
+    $.ajax({
+      type: "get",
+      url: `${url}/generaldata`,
+      dataType: "json",
+      success: function (response) {
+        console.log($('.num-desc')[0])
+        response.data.forEach((element, index) => {
+          console.log(index)
+          $('.num').eq(index).text(element.num)
+          $('.num-desc').eq(index).text(element.item)
+        });
+      }
+    });
+  }
+
+  function getTouristage() {
+    $.ajax({
+      type: "get",
+      url: `${url}/touristage`,
+      dataType: "json",
+      success: function (response) {
+        var legend = []
+        var data = []
+        response.data.forEach(element => {
+          let num = []
+          let time = []
+          element.detail.forEach(ele => {
+            time.push(ele.time)
+            num.push(ele.num)
+          })
+          legend = time
+          data.push({
+            name: element.item,
+            type: 'bar',
+            data: num,
+          })
+        });
+        console.log(legend)
+        var ageOption = {
+          tooltip: {
+            trigger: 'axis'
+          },
+          legend: {
+            data: legend,
+            textStyle: {
+              color: '#fff'
+            },
+            y: 'bottom'
+          },
+          calculable: true,
+          xAxis: [
+            {
+              type: 'category',
+              data: legend,
+              axisLine: {
+                lineStyle: {
+                  color: '#fff'
+                }
+              }
+            },
+
+          ],
+          yAxis: [
+            {
+              type: 'value',
+              axisLine: {
+                lineStyle: {
+                  color: '#fff'
+                }
+              }
+            }
+          ],
+          series: data
+        }
+        drawCharts('tourist-age', ageOption)
+      }
+    })
+  }
+
+  function getTouristdate(param) {
+    $.ajax({
+      type: "get",
+      url: `${url}/touristdate`,
+      dataType: "json",
+      success: function (response) {
+        let legend = []
+        let data = []
+        response.data.forEach(element => {
+          legend.push(element.item)
+          data.push(element.num)
+        });
+        var dateOption = {
+          tooltip: {
+            trigger: 'axis'
+          },
+          legend: {
+            orient: 'vertical',
+            x: 'right',
+            data: legend,
+            textStyle: {
+              fontSize: 16,//字体大小
+              color: '#ffffff'//字体颜色
+            }
+          },
+          toolbox: {
+            // show : true,
+            // feature : {
+            //     mark : {show: true},
+            //     dataView : {show: true, readOnly: false},
+            //     magicType: {show: true, type: ['line', 'bar']},
+            //     restore : {show: true},
+            //     saveAsImage : {show: true}
+            // }
+          },
+          calculable: true,
+          xAxis: [
+            {
+              type: 'value',
+              axisLine: {
+                lineStyle: {
+                  color: '#fff'
+                },
+                interval: 0
+              },
+              axisLabel: { formatter: '{value}人' },
+              boundaryGap: false
+            },
+          ],
+          axisLine: {
+            lineStyle: {
+              color: '#fff'
+            }
+          },
+          yAxis: [
+            {
+              type: 'category',
+              data: legend,
+              axisLine: {
+                lineStyle: {
+                  color: '#fff'
+                }
+              }
+            }
+          ],
+          series: [
+            {
+              name: '游览人数',
+              type: 'bar',
+              data
+            }
+          ]
+        };
+        drawCharts('tourist-date', dateOption)
+      }
+    });
+  }
+
+  function getTouristfrequency() {
+    $.ajax({
+      type: "get",
+      url: `${url}/touristfrequency`,
+      dataType: "json",
+      success: function (response) {
+        let data = []
+        let legend = []
+        response.data.forEach(element => {
+          legend.push(element.item)
+          data.push({ value: element.num, name: element.item })
+        })
+        var rateOption = {
+          tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b}: {c} ({d}%)"
+          },
+          legend: {
+            orient: 'vertical',
+            x: 'right',
+            data: legend,
+            textStyle: {
+              fontSize: 16,//字体大小
+              color: '#ffffff'//字体颜色
+            }
+          },
+          series: [
+            {
+              name: '旅游频率',
+              type: 'pie',
+              radius: ['50%', '70%'],
+              avoidLabelOverlap: false,
+              label: {
+                normal: {
+                  show: false,
+                  position: 'center'
+                },
+                emphasis: {
+                  show: true,
+                  textStyle: {
+                    fontSize: '20'
+                  }
+                }
+              },
+              labelLine: {
+                normal: {
+                  show: false
+                }
+              },
+              data
+            }
+          ]
+        };
+        drawCharts('tourist-rate', rateOption)
+      }
+    });
+  }
+
+  function getTouristentertain() {
+    $.ajax({
+      type: "get",
+      url: `${url}/touristentertain`,
+      dataType: "json",
+      success: function (response) {
+        let data = []
+        let legend = []
+        response.data.forEach(element => {
+          legend.push(element.item)
+          data.push({ value: element.num, name: element.item })
+        })
+        var entertainOption = {
+          tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b}: {c} ({d}%)"
+          },
+          legend: {
+            orient: 'vertical',
+            x: 'right',
+            data: legend,
+            textStyle: {
+              fontSize: 16,//字体大小
+              color: '#ffffff'//字体颜色
+            }
+          },
+          series: [
+            {
+              name: '娱乐频率',
+              type: 'pie',
+              radius: ['50%', '70%'],
+              avoidLabelOverlap: false,
+              label: {
+                normal: {
+                  show: false,
+                  position: 'center'
+                },
+                emphasis: {
+                  show: true,
+                  textStyle: {
+                    fontSize: '20'
+                  }
+                }
+              },
+              labelLine: {
+                normal: {
+                  show: false
+                }
+              },
+              data
+            }
+          ]
+        };
+        drawCharts('tourist-entertain', entertainOption)
+      }
+    });
+  }
+
+  function getTodaydata(param) {
+    $.ajax({
+      type: "get",
+      url: `${url}/todaydata`,
+      dataType: "json",
+      success: function (response) {
+        let data = []
+        let legend = []
+        response.data.forEach(element => {
+          legend.push(element.item)
+          data.push(element.num)
+        })
+        var jkdataOption = {
+          tooltip: {
+            trigger: 'axis'
+          },
+          calculable: true,
+          xAxis: [
+            {
+              type: 'category',
+              data: legend,
+              axisLine: {
+                lineStyle: {
+                  color: '#fff'
+                }
+              }
+            },
+
+          ],
+          yAxis: [
+            {
+              type: 'value',
+              axisLine: {
+                lineStyle: {
+                  color: '#fff'
+                }
+              }
+            }
+          ],
+          series: [
+            {
+              type: 'line',
+              data,
+              // markLine : {
+              //     data : [
+              //         {type : 'average', name: '平均值'}
+              //     ]
+              // }
+            }
+          ]
+        }
+        drawCharts('tourist-jkdata', jkdataOption)
+      }
+    })
+  }
+
+  function getTouristgender(param) {
+    $.ajax({
+      type: "get",
+      url: `${url}/touristgender`,
+      dataType: "json",
+      success: function (response) {
+        var legend = []
+        var data = []
+        response.data.forEach(element => {
+          let num = []
+          let time = []
+          element.detail.forEach(ele => {
+            time.push(ele.time)
+            num.push(ele.num)
+          })
+          legend = time
+          data.push({
+            name: element.item,
+            type: 'line',
+            data: num,
+          })
+        });
+        var genderOption = {
+          tooltip: {
+            trigger: 'axis'
+          },
+          legend: {
+            y: 'bottom',
+            data: legend,
+            textStyle: {
+              fontSize: 16,//字体大小
+              color: '#ffffff'//字体颜色
+            }
+          },
+          calculable: true,
+          xAxis: [
+            {
+              type: 'category',
+              data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月'],
+              axisLine: {
+                lineStyle: {
+                  color: '#fff'
+                }
+              }
+            },
+
+          ],
+          yAxis: [
+            {
+              type: 'value',
+              axisLine: {
+                lineStyle: {
+                  color: '#fff'
+                }
+              }
+            }
+          ],
+          series: data
+        }
+        drawCharts('tourist-gender', genderOption)
+      }
+    });
+  }
+
+</script>
+
+</html>
