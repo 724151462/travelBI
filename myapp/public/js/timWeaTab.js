@@ -24,7 +24,7 @@ let time = new Date().toLocaleString('chinese', { hour12: false }); // 修改数
   });
   $('.tabcont').eq(0).show();  //默认显示第一个内容
   $('.tabcontent li').eq(0).css('background', '#1E90FF');  //默认第一个标题显示颜色不同
-  $('.tabcontent li').mouseover(function () {   //鼠标移上去
+  $('.tabcontent li').click(function () {   //鼠标移上去
     $(this).css('background', '#1E90FF').siblings().css('background', '#315E7F');  //标题的颜色变成选中色,其他颜色还原
     $('.tabcont').hide().eq($(this).index()).show();   //当前选中内容显示
     if($(this).index() !== 0) {

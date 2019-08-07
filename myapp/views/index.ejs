@@ -7,6 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.2.1/echarts-en.common.min.js"></script>
+  <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
   <script src="http://data-visual.cn/datav/src/js/echarts/extension/echarts-wordcloud.min.js"></script>
   <script src="./js/shine.js"></script>
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -354,8 +355,8 @@
           <div class="tabcont">
               <iframe height="400" width="700" src="http://zuimeilangqi.com/mediaLibrary/vtour/tour.html"></iframe>
           </div>
-          <div class="tabcont" id="map-container">
-            
+          <div class="tabcont">
+              <div id="map-container"></div>
           </div>
         </div>
       </div>
@@ -411,9 +412,10 @@
 <script src="./js/drawCharts.js"></script>
 <script src="./js/timWeaTab.js"></script>
 <script src="https://webapi.amap.com/maps?v=1.4.15&key=c84da73fddca92c5416e2999c7baf667&&plugin=AMap.ToolBar"></script>
-<script src="./js/map.js"></script>
-<script src="./js/wc.js"></script>
+<!-- <script src="./js/map.js"></script> -->
+
 <script src="./js/ageTimeTab.js"></script>
+<script src="./js/qxCharts.js"></script>
 <script>
   var url = 'http://localhost:3000/api'
   $(function () {
@@ -588,6 +590,11 @@
             {
               name: '游览人数',
               type: 'bar',
+              itemStyle:{
+                  normal:{
+                      color:'#F0862B'
+                  }
+              },
               data
             }
           ]
@@ -834,5 +841,5 @@
   }
 
 </script>
-
+<script src="./js/wc.js"></script>
 </html>
