@@ -89,7 +89,8 @@
       font-weight: bold;
       display: inline-block;
       padding-bottom: 5px;
-      background-image: url('./images/header-bg.png');
+      background-color: #22284A;
+      border-bottom: 1px solid #035285;
     }
 
     .weather-txt {
@@ -156,6 +157,12 @@
 
     .item-gender {
       /* background-color: #4dc7ec; */
+    }
+
+    .age-time {
+      border: 1px solid rgb(0, 216, 252);
+      color: #fff;
+      padding: 1px 10px
     }
 
     #map-container{
@@ -311,9 +318,16 @@
     <div class="item item-age">
       <div class="row mar-l-20 mar-t-10">
         <span class="title"><img src="./images/right@3x.png" alt="">游客年龄特性分析</span>
+        <div class="row mar-r-10">
+          <span class="age-time">周</span>
+          <span class="age-time">月</span>
+          <span class="age-time">年</span>
+        </div>
       </div>
       <div class="charts">
-        <div class="data-content" id="tourist-age"></div>
+        <div class="data-content agetabcont" id="tourist-age-week"></div>
+        <div class="data-content agetabcont" id="tourist-age-mouth"></div>
+        <div class="data-content agetabcont" id="tourist-age-year"></div>
       </div>
     </div>
     <div class="item item-day">
@@ -331,7 +345,7 @@
             <ul class="ul">
               <li class="t3">视频</li>
               <li class="t2">实景图</li>
-              <li class="t1">景区热点</li>
+              <li class="t1">景区地图</li>
             </ul>   
           </div>
           <div class="tabcont">
@@ -399,13 +413,14 @@
 <script src="https://webapi.amap.com/maps?v=1.4.15&key=c84da73fddca92c5416e2999c7baf667&&plugin=AMap.ToolBar"></script>
 <script src="./js/map.js"></script>
 <script src="./js/wc.js"></script>
+<script src="./js/ageTimeTab.js"></script>
 <script>
   var url = 'http://localhost:3000/api'
   $(function () {
     getWeather()
     getPeopleRate()
     // getGeneraldata()
-    getTouristage()
+    getTouristage('week')
     getTouristdate()
     getTouristfrequency()
     getTouristentertain()
@@ -502,70 +517,6 @@
         });
       }
     });
-  }
-
-  function getTouristage() {
-    $.ajax({
-      type: "get",
-      url: `${url}/touristage`,
-      dataType: "json",
-      success: function (response) {
-        var legend = []
-        var data = []
-        response.data.forEach(element => {
-          let num = []
-          let time = []
-          element.detail.forEach(ele => {
-            time.push(ele.time)
-            num.push(ele.num)
-          })
-          legend = time
-          data.push({
-            name: element.item,
-            type: 'bar',
-            data: num,
-          })
-        });
-        console.log(legend)
-        var ageOption = {
-          tooltip: {
-            trigger: 'axis'
-          },
-          legend: {
-            data: legend,
-            textStyle: {
-              color: '#fff'
-            },
-            y: 'bottom'
-          },
-          calculable: true,
-          xAxis: [
-            {
-              type: 'category',
-              data: legend,
-              axisLine: {
-                lineStyle: {
-                  color: '#fff'
-                }
-              }
-            },
-
-          ],
-          yAxis: [
-            {
-              type: 'value',
-              axisLine: {
-                lineStyle: {
-                  color: '#fff'
-                }
-              }
-            }
-          ],
-          series: data
-        }
-        drawCharts('tourist-age', ageOption)
-      }
-    })
   }
 
   function getTouristdate(param) {
