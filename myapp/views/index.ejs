@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>智慧旅游大数据统计分析系统</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.2.1/echarts-en.common.min.js"></script>
   <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
   <script src="http://data-visual.cn/datav/src/js/echarts/extension/echarts-wordcloud.min.js"></script>
@@ -34,7 +34,7 @@
       justify-content: center;
       align-content: center;
       grid-template-columns: 24% 50% 24%;
-      grid-template-rows: 300px 300px 300px 620px 600px;
+      grid-template-rows: 150px 150px 150px 300px 300px;
       gap: 5px;
       background-color: rgba(15, 33, 79, 0.8);
       background-image: url('./images/background@3x.png');
@@ -86,7 +86,7 @@
     .sys-name {
       width: 45%;
       color: rgb(0, 222, 255);
-      font-size: 1.5em;
+      font-size: 1em;
       font-weight: bold;
       display: inline-block;
       padding-bottom: 5px;
@@ -152,10 +152,6 @@
       /* background-color: #d0e4a9; */
     }
 
-    .item-tourist {
-      /* background-color: #4dc7ec; */
-    }
-
     .item-gender {
       /* background-color: #4dc7ec; */
     }
@@ -168,16 +164,18 @@
 
     #map-container{
       width: 1500px;
-      height: 900px;
+      height: 400px;
     }
 
     .data-content {
+      /* background-color: red; */
       width: 100%;
       height: 250px;
     }
 
     .item-tourist {
-      width: 950px;
+      width: 100%;
+      justify-content: space-around !important;
     }
 
     .row {
@@ -242,6 +240,10 @@
       display: none;
       margin-left: 30px;
     }
+
+    .tabcontent{
+      width: 100%
+    }
   </style>
 </head>
 
@@ -255,7 +257,7 @@
   <div id="container">
     <div class="item item-title row al-start">
       <div class="title-left column" style="width: 40%">
-        <img style="align-self: flex-end" src="./images/header-left.png" height="50" alt="">
+        <img style="align-self: flex-end" src="./images/header-left.png" height="65" alt="">
         <div class="mar-b-20 mar-l-10 mar-t-30 row">
           <img src="./images/right@3x.png" height="20" alt="">
           <!-- <img src="./images/tianqi@3x.png" height="20" alt=""> -->
@@ -272,7 +274,7 @@
       </div>
       <span class="sys-name">旅游大数据分析系统</span>
       <div class="title-right column" style="width: 40%; align-items: flex-end">
-        <img style="align-self: flex-start" src="./images/header-right.png" height="50" alt="">
+        <img style="align-self: flex-start" src="./images/header-right.png" height="65" alt="">
         <div class="mar-t-30 mar-r-10 row">
           <div id="time"></div>
           <div id="week" class="mar-l-10"></div>
@@ -335,7 +337,7 @@
       <div class="row mar-l-20 mar-t-10">
         <span class="title"><img src="./images/right@3x.png" alt="">游客景点行程天数分析</span>
       </div>
-      <div class="charts" style="width: 500px;margin-left: 0px">
+      <div class="charts">
         <div class="data-content" id="tourist-date"></div>
       </div>
     </div>
@@ -350,10 +352,10 @@
             </ul>   
           </div>
           <div class="tabcont">
-            <video height="900" width="1500" id="vdo" controls="controls" src="./video/琅岐岛.mp4"></video>
+            <video height="400" width="1500" id="vdo" controls="controls" src="./video/琅岐岛.mp4"></video>
           </div>
           <div class="tabcont">
-              <iframe height="900" width="1500" src="http://zuimeilangqi.com/mediaLibrary/vtour/tour.html"></iframe>
+              <iframe height="400" width="1500" src="http://zuimeilangqi.com/mediaLibrary/vtour/tour.html"></iframe>
           </div>
           <div class="tabcont">
               <div id="map-container"></div>
@@ -379,21 +381,21 @@
     </div>
     <div class="item">
       <div class="row  item-tourist">
-        <div class="column" style="width: 50%">
+        <div class="column">
           <div class="row mar-l-20 mar-t-10">
             <span class="title"><img src="./images/right@3x.png" alt="">游客娱乐项目占比</span>
           </div>
           <div class="charts">
-            <div class="data-content" style="width: 450px" id="tourist-entertain"></div>
+            <div class="data-content" style="width: 900px" id="tourist-entertain"></div>
           </div>
         </div>
 
-        <div class="column" style="width: 50%">
+        <div class="column">
           <div class="row mar-l-20 mar-t-10">
             <span class="title"><img src="./images/right@3x.png" alt="">今日旅游监控数据</span>
           </div>
           <div class="charts">
-            <div class="data-content" style="width: 450px" id="tourist-jkdata"></div>
+            <div class="data-content" style="width: 900px" id="tourist-jkdata"></div>
           </div>
         </div>
       </div>

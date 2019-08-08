@@ -30,4 +30,9 @@ let time = new Date().toLocaleString('chinese', { hour12: false }); // 修改数
     if($(this).index() !== 0) {
       document.getElementById("vdo").pause()
     }
+    if($(this).index() !== 1) {
+      document.getElementById("ifm").src = ''
+    }else{
+      document.getElementById("ifm").src = 'http://zuimeilangqi.com/mediaLibrary/vtour/tour.html'
+    }
   });
