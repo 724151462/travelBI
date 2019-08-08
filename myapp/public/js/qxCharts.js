@@ -6,7 +6,7 @@ var dom = document.getElementById("map-container");
 
             // myChart.showLoading();
 
-            $.get('../city/350105.json', function (geoJson) {
+            $.get('http://148.70.65.61/350105.json', function (geoJson) {
 
                 // myChart.hideLoading();
 
@@ -24,20 +24,21 @@ var dom = document.getElementById("map-container");
                         roam: true, //是否允许缩放
                         itemStyle: {
                             normal: {
-                                color: 'rgba(51, 69, 89, .5)', //地图背景色
+                                color: 'rgba(37, 43, 61, .5)', //地图背景色
                                 borderColor: '#516a89', //省市边界线00fcff 516a89
                                 borderWidth: 1
                             },
                             emphasis: {
-                                color: 'rgba(37, 43, 61, .5)' //悬浮背景
+                                color: '#000' //悬浮背景
                             }
                         }
                     },
-                    backgroundColor: '#404a59',
+                    backgroundColor: '#00182A',
                     title: {
-                        text: '福州',
+                        text: '马尾区',
                         left: 'center',
                         textStyle: {
+                            fontSize: 40,
                             color: '#fff'
                         }
                     },
@@ -49,19 +50,20 @@ var dom = document.getElementById("map-container");
 
 
 
-        var fuzhouCoordMap = {
-            '琅岐旅游度假区': [119.648781, 26.067122],
-            '琅岐红光湖公园': [119.563195,26.09566],
-            '琅岐岛': [119.613221,26.108248]
-        }
-        var chinaDatas = [
-            [{
-                name: '琅岐红光湖公园', value: 500
-            }],
-            [{
-                name: '琅岐岛', value: 100
-            }]
-        ]
+        var fuzhouCoordMap
+        var chinaDatas
+
+        $.ajax({
+            type: "get",
+            url: `${url}/qxcharts`,
+            dataType: "json",
+            async:false,
+            success: function (response) {
+                // console.log(response.data.mapObj, fuzhouCoordMap, '==========', response.data.dataList, chinaDatas)
+                fuzhouCoordMap = response.data.mapObj
+                chinaDatas = response.data.dataList
+            }
+        });
 
         var convertData = function (data) {
             var res = [];
@@ -123,7 +125,7 @@ var dom = document.getElementById("map-container");
                             formatter: function (params) {//圆环显示文字
                                 return params.data.name;
                             },
-                            fontSize: 13
+                            fontSize: 20
                         },
                         emphasis: {
                             show: true
@@ -142,6 +144,7 @@ var dom = document.getElementById("map-container");
                         }
                     },
                     data: item[1].map(function (dataItem) {
+                        console.log(dataItem)
                         return {
                             name: dataItem[0].name,
                             value: fuzhouCoordMap[dataItem[0].name].concat([dataItem[0].value])
@@ -163,22 +166,23 @@ var dom = document.getElementById("map-container");
                             show: true,
                             position: 'right',
                             //offset:[5, 0],
-                            color: '#0f0',
+                            color: '#F9483A',
                             formatter: '{b}',
                             textStyle: {
-                                color: "#0f0"
+                                color: "#F9483A",
+                                fontSize: 20
                             }
                         },
                         emphasis: {
                             show: true,
-                            color: "#f60"
+                            color: "#F9483A"
                         }
                     },
                     symbol: 'pin',
                     symbolSize: 50,
                     data: [{
                         name: item[0],
-                        value: fuzhouCoordMap[item[0]].concat([10]),
+                        value: fuzhouCoordMap[item[0]].concat([500]),
                     }],
                 }
             );
@@ -186,7 +190,7 @@ var dom = document.getElementById("map-container");
         option = {
             tooltip: {
                 trigger: 'item',
-                backgroundColor: 'rgba(166, 200, 76, 0.82)',
+                backgroundColor: '#0E4C5F',
                 borderColor: '#FFFFCC',
                 showDelay: 0,
                 hideDelay: 0,
@@ -196,10 +200,16 @@ var dom = document.getElementById("map-container");
                 formatter: function (params, ticket, callback) {
                     //根据业务自己拓展要显示的内容
                     console.log(params)
-                    var res = "";
                     var name = params.name;
                     var value = params.value;
-                    res = "<span style='color:#fff;'>" + name + "</span><br/>数据：" + value;
+                    var res = "";
+                    if (params.componentSubType === "effectScatter") {
+                        // res = "<span style='color:#fff;font-size:20px'>" + name + "</span><br/>";
+                        res = "<span style='color: #fff;font-size:20px'>可以找图片替换上去</span><br/><span style='color: #fff;font-size:20px'>或者直接放地点名字</span>"
+                        // res = "<img src='../images/tianqi@3x.png' />"
+                    }else if(params.componentSubType === "lines"){
+                        res = "<span style='color:#fff;font-size:20px'>游览人数：" + value + "</span>";
+                    }
                     return res;
                 }
             },
@@ -212,26 +222,6 @@ var dom = document.getElementById("map-container");
                 color: ['#f44336', '#fc9700', '#ffde00', '#ffde00', '#00eaff'],
                 textStyle: {
                     color: '#fff'
-                }
-            },
-            geo: {
-                map: 'china',
-                zoom: 1.2,
-                label: {
-                    emphasis: {
-                        show: false
-                    }
-                },
-                roam: true, //是否允许缩放
-                itemStyle: {
-                    normal: {
-                        color: 'rgba(51, 69, 89, .5)', //地图背景色
-                        borderColor: '#516a89', //省市边界线00fcff 516a89
-                        borderWidth: 1
-                    },
-                    emphasis: {
-                        color: 'rgba(37, 43, 61, .5)' //悬浮背景
-                    }
                 }
             },
             series: series

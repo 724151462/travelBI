@@ -1,4 +1,4 @@
-var myChart = echarts.init(document.getElementById('wc'));
+var myChart = echarts.init(document.getElementById('wordc'));
 console.log(url)
 var maskImage = new Image();
 //重点：云彩图片的base64码

@@ -34,7 +34,7 @@
       justify-content: center;
       align-content: center;
       grid-template-columns: 24% 50% 24%;
-      grid-template-rows: 150px 150px 150px 300px 300px;
+      grid-template-rows: 300px 300px 300px 620px 600px;
       gap: 5px;
       background-color: rgba(15, 33, 79, 0.8);
       background-image: url('./images/background@3x.png');
@@ -167,8 +167,8 @@
     }
 
     #map-container{
-      width: 700px;
-      height: 400px;
+      width: 1500px;
+      height: 900px;
     }
 
     .data-content {
@@ -350,10 +350,10 @@
             </ul>   
           </div>
           <div class="tabcont">
-            <video height="400" width="700" id="vdo" controls="controls" src="./video/琅岐岛.mp4"></video>
+            <video height="900" width="1500" id="vdo" controls="controls" src="./video/琅岐岛.mp4"></video>
           </div>
           <div class="tabcont">
-              <iframe height="400" width="700" src="http://zuimeilangqi.com/mediaLibrary/vtour/tour.html"></iframe>
+              <iframe height="900" width="1500" src="http://zuimeilangqi.com/mediaLibrary/vtour/tour.html"></iframe>
           </div>
           <div class="tabcont">
               <div id="map-container"></div>
@@ -374,7 +374,7 @@
         <span class="title"><img src="./images/right@3x.png" alt="">搜索热词</span></span>
       </div>
       <div class="charts">
-        <div id='wc' style="width: 100%; height: 250px"></div>
+        <div id='wordc' style="width: 100%; height: 250px"></div>
       </div>
     </div>
     <div class="item">
@@ -409,15 +409,18 @@
     </div>
   </div>
 </body>
+<script>
+  var url = 'http://localhost:3000/api'
+</script>
 <script src="./js/drawCharts.js"></script>
 <script src="./js/timWeaTab.js"></script>
+<script src="./js/wc.js"></script>
 <script src="https://webapi.amap.com/maps?v=1.4.15&key=c84da73fddca92c5416e2999c7baf667&&plugin=AMap.ToolBar"></script>
 <!-- <script src="./js/map.js"></script> -->
 
 <script src="./js/ageTimeTab.js"></script>
 <script src="./js/qxCharts.js"></script>
 <script>
-  var url = 'http://localhost:3000/api'
   $(function () {
     getWeather()
     getPeopleRate()
@@ -841,5 +844,5 @@
   }
 
 </script>
-<script src="./js/wc.js"></script>
+
 </html>

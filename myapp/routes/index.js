@@ -310,4 +310,28 @@ router.get('/api/wordcloud', function (req, res, next) {
 });
 
 
+router.get('/api/qxcharts', function (req, res, next) {
+  res.json(
+    {
+      data: {
+        mapObj: {
+          // key值为地点，value为坐标，示例如下
+          '琅岐旅游度假区': [119.648781, 26.067122],
+          '琅岐红光湖公园': [119.563195, 26.09566],
+          '琅岐岛': [119.613221, 26.108248]
+        },
+        dataList: [
+          //数据示例如下
+          [{
+            name: '琅岐红光湖公园', value: 500
+          }],
+          [{
+            name: '琅岐岛', value: 100
+          }]
+        ]
+      }
+    })
+});
+
+
 module.exports = router;    
